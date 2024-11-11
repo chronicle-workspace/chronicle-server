@@ -7,10 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Provider {
+  GOOGLE
+  APPLE
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  username  String
+  id         String   @id @default(uuid())
+  email      String   @unique
+  diaries    Diary[]
+  provider   Provider
+  providerId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Diary {
+  id        String         @id @default(uuid())
+  title     String
+  contents  DiaryContent[]
+  isLocked  Boolean        @default(false)
   password  String?
-  createdAt DateTime @default(now())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+enum Mimetype {
+  TEXT
+  IMAGE
+  AUDIO
+}
+
+model DiaryContent {
+  id       String   @id @default(uuid())
+  order    Int
+  mimetype Mimetype
+  content  String
+  diaryId  String
+  diary    Diary    @relation(fields: [diaryId], references: [id])
 }
