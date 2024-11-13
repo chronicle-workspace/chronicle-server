@@ -56,14 +56,7 @@ export class AuthService {
   }
 
   public async verifyRefreshToken(id: string, token: string) {
-    const _token = await this.jwtService.verifyAsync(token, {
-      secret: this.configService.get("REFRESH_TOKEN_SECRET"),
-    });
-
-    return (
-      _token.id === id &&
-      (await this.cacheService.get(`REFRESH/${id}`)) === token
-    );
+    return (await this.cacheService.get(`REFRESH/${id}`)) === token;
   }
 
   public async removeRefreshToken(id: string) {
