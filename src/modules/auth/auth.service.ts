@@ -1,9 +1,11 @@
 import { OAuth2Client } from "google-auth-library";
 
 import { Cache } from "@nestjs/cache-manager";
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
+
+import appleOAuthDecrypt from "src/common/utils/apple/decrypt";
 
 import { UserService } from "../user/user.service";
 
@@ -68,10 +70,7 @@ export class AuthService {
     await this.cacheService.del(`REFRESH/${id}`);
   }
 
-  public async googleLogin(idToken?: string) {
-    if (!idToken)
-      throw new HttpException("Missing idToken", HttpStatus.BAD_REQUEST);
-
+  public async googleLogin(idToken: string) {
     const ticket = await this.client.verifyIdToken({
       idToken,
     });
@@ -90,5 +89,18 @@ export class AuthService {
     return await this.generateTokens(user.id);
   }
 
-  public async appleLogin() {}
+  public async appleLogin(idToken: string) {
+    const appleUser = await appleOAuthDecrypt(idToken);
+
+    let user = await this.userService.findOneByProvider("APPLE", appleUser.sub);
+
+    if (!user)
+      user = await this.userService.create({
+        email: appleUser.email ?? "",
+        provider: "APPLE",
+        providerId: appleUser.sub,
+      });
+
+    return await this.generateTokens(user.id);
+  }
 }

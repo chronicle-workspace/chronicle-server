@@ -12,6 +12,7 @@ import {
 import { CurrentUser } from "src/common";
 
 import { AuthService } from "./auth.service";
+import { AppleLoginDTO } from "./dto/apple.login.dto";
 import { GoogleLoginDTO } from "./dto/google.login.dto";
 import { AccessGuard } from "./guards/access.guard";
 import { RefreshGuard } from "./guards/refresh.guard";
@@ -51,7 +52,7 @@ export class AuthController {
   @Post("/app/apple")
   @ApiOperation({ summary: "Login with Apple" })
   @ApiOkResponse({ description: "Login successful" })
-  public async appleLogin(@Body() { idToken }: GoogleLoginDTO) {
+  public async appleLogin(@Body() { idToken }: AppleLoginDTO) {
     return await this.authService.googleLogin(idToken);
   }
 }
