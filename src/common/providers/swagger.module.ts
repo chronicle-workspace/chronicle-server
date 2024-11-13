@@ -10,5 +10,7 @@ export async function swagger(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("document", app, document);
+  SwaggerModule.setup("document", app, document, {
+    jsonDocumentUrl: "/document-json",
+  });
 }
