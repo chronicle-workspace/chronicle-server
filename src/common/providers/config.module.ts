@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigModuleOptions } from "@nestjs/config";
 
-import { ConfigValidator } from "src/common";
+import { ConfigValidator } from "../validators/config.validator";
 
 const options: ConfigModuleOptions = {
   isGlobal: true,

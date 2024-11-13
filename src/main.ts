@@ -1,4 +1,4 @@
-import * as cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 
 import { Logger, ValidationPipe } from "@nestjs/common";
 import { CustomOrigin } from "@nestjs/common/interfaces/external/cors-options.interface";
