@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { Request } from "express";
+import type { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 
 import { Injectable } from "@nestjs/common";
