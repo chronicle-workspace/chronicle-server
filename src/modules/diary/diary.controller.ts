@@ -13,6 +13,7 @@ import {
 import {
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
@@ -22,6 +23,7 @@ import { CurrentUser } from "src/common";
 import { AccessGuard } from "../auth/guards/access.guard";
 import { DiaryService } from "./diary.service";
 import { CreateDiaryContentDTO, CreateDiaryDTO } from "./dto/create.diary.dto";
+import { DiaryDTO } from "./dto/diary.dto";
 import { UpdateDiaryContentDTO } from "./dto/update.diary.dto";
 
 @Controller("diary")
@@ -31,6 +33,8 @@ export class DiaryController {
 
   @Get("/")
   @UseGuards(AccessGuard)
+  @ApiQuery({ name: "page", required: false })
+  @ApiQuery({ name: "limit", required: false })
   @ApiOperation({ summary: "Get all diaries" })
   @ApiOkResponse({ description: "Return all diaries" })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
