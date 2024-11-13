@@ -14,6 +14,7 @@ import { CurrentUser } from "src/common";
 import { AuthService } from "./auth.service";
 import { AppleLoginDTO } from "./dto/apple.login.dto";
 import { GoogleLoginDTO } from "./dto/google.login.dto";
+import { TokenDto } from "./dto/token.dto";
 import { AccessGuard } from "./guards/access.guard";
 import { RefreshGuard } from "./guards/refresh.guard";
 
@@ -26,7 +27,7 @@ export class AuthController {
   @UseGuards(RefreshGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Refresh access token" })
-  @ApiOkResponse({ description: "Access token refreshed" })
+  @ApiOkResponse({ description: "Access token refreshed", type: TokenDto })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async getAccessToken(@CurrentUser() { id }: Pick<User, "id">) {
     return await this.authService.generateTokens(id);
@@ -44,15 +45,15 @@ export class AuthController {
 
   @Post("/app/google")
   @ApiOperation({ summary: "Login with Google" })
-  @ApiOkResponse({ description: "Login successful" })
+  @ApiOkResponse({ description: "Login successful", type: TokenDto })
   public async googleLogin(@Body() { idToken }: GoogleLoginDTO) {
     return await this.authService.googleLogin(idToken);
   }
 
   @Post("/app/apple")
   @ApiOperation({ summary: "Login with Apple" })
-  @ApiOkResponse({ description: "Login successful" })
+  @ApiOkResponse({ description: "Login successful", type: TokenDto })
   public async appleLogin(@Body() { idToken }: AppleLoginDTO) {
-    return await this.authService.googleLogin(idToken);
+    return await this.authService.appleLogin(idToken);
   }
 }
