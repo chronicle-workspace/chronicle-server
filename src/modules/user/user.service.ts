@@ -1,5 +1,4 @@
 import { $Enums } from "@prisma/client";
-import { hash } from "bcrypt";
 
 import { Injectable } from "@nestjs/common";
 
@@ -23,16 +22,31 @@ export class UserService {
     });
   }
 
-  public async findOneByEmailAndPassword(email: string, password: string) {
+  public async findOneById(id: string) {
+    return await this.prisma.user.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
+
+  public async findOneByEmail(email: string) {
     return await this.prisma.user.findFirst({
       where: {
         email,
-        password: await hash(password, 10),
       },
     });
   }
 
   public async create(data: CreateUserDTO) {
     return await this.prisma.user.create({ data });
+  }
+
+  public async delete(id: string) {
+    return await this.prisma.user.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
