@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -24,6 +25,7 @@ import { AccessGuard } from "../auth/guards/access.guard";
 import { DiaryService } from "./diary.service";
 import { CreateDiaryContentDTO, CreateDiaryDTO } from "./dto/create.diary.dto";
 import { DiaryDTO } from "./dto/diary.dto";
+import { GetDiaryContentDTO } from "./dto/get.diary.dto";
 import { UpdateDiaryContentDTO } from "./dto/update.diary.dto";
 
 @Controller("diary")
@@ -36,7 +38,7 @@ export class DiaryController {
   @ApiQuery({ name: "page", required: false })
   @ApiQuery({ name: "limit", required: false })
   @ApiOperation({ summary: "Get all diaries" })
-  @ApiOkResponse({ description: "Return all diaries" })
+  @ApiOkResponse({ description: "Return all diaries", type: [DiaryDTO] })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async findAll(
     @CurrentUser() user: User,
@@ -49,7 +51,7 @@ export class DiaryController {
   @Get("/:diaryId")
   @UseGuards(AccessGuard)
   @ApiOperation({ summary: "Get diary" })
-  @ApiOkResponse({ description: "Return diary" })
+  @ApiOkResponse({ description: "Return diary", type: GetDiaryContentDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async findOne(@Param("diaryId") diaryId: string) {
     return await this.diaryService.findOne(diaryId);
@@ -60,10 +62,7 @@ export class DiaryController {
   @ApiOperation({ summary: "Create diary" })
   @ApiOkResponse({ description: "Diary created" })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  public async create(
-    @CurrentUser() user: User,
-    @Query() body: CreateDiaryDTO,
-  ) {
+  public async create(@CurrentUser() user: User, @Body() body: CreateDiaryDTO) {
     return await this.diaryService.create(user, body);
   }
 
@@ -74,7 +73,7 @@ export class DiaryController {
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async createContent(
     @Param("diaryId") diaryId: string,
-    @Query() body: CreateDiaryContentDTO,
+    @Body() body: CreateDiaryContentDTO,
   ) {
     return await this.diaryService.createContent(diaryId, body);
   }
@@ -87,7 +86,7 @@ export class DiaryController {
   public async updateContent(
     @Param("diaryId") diaryId: string,
     @Param("contentId") contentId: string,
-    @Query() body: UpdateDiaryContentDTO,
+    @Body() body: UpdateDiaryContentDTO,
   ) {
     return await this.diaryService.updateContent(diaryId, contentId, body);
   }

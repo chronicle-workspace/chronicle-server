@@ -12,6 +12,7 @@ import {
 import { CurrentUser } from "src/common";
 
 import { AccessGuard } from "../auth/guards/access.guard";
+import { UserDTO } from "./dto/user.dto";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -23,7 +24,7 @@ export class UserController {
   @UseGuards(AccessGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Get user profile" })
-  @ApiOkResponse({ description: "User profile retrieved" })
+  @ApiOkResponse({ description: "User profile retrieved", type: UserDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public getProfile(@CurrentUser() user: User) {
     return user;

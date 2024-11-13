@@ -1,4 +1,12 @@
 import { $Enums, Diary, DiaryContent } from "@prisma/client";
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsNumberString,
+  IsString,
+  Length,
+} from "class-validator";
 
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -7,12 +15,16 @@ export class DiaryDTO implements Partial<Diary> {
   id: string;
 
   @ApiProperty({ description: "일기 제목" })
+  @IsString({ message: "Title must be a string" })
   title: string;
 
   @ApiProperty({ description: "일기 잠금 여부" })
+  @IsBoolean({ message: "isLocked must be a boolean" })
   isLocked: boolean;
 
   @ApiProperty({ description: "일기 비밀번호" })
+  @Length(4, 4, { message: "Password must be 4 characters" })
+  @IsNumberString({}, { message: "Password must be a number string" })
   password?: string;
 
   @ApiProperty({ description: "일기 생성일" })
@@ -23,12 +35,15 @@ export class DiaryDTO implements Partial<Diary> {
 }
 
 export class DiaryContentDTO implements Partial<DiaryContent> {
+  @IsNumber({}, { message: "Order must be a number" })
   @ApiProperty({ description: "내용 순서" })
   order?: number;
 
+  @IsString({ message: "Content must be a string" })
   @ApiProperty({ description: "일기 내용" })
   content: string;
 
+  @IsEnum($Enums.Mimetype)
   @ApiProperty({ description: "내용 MIME 타입", enum: $Enums.Mimetype })
   mimetype: $Enums.Mimetype;
 

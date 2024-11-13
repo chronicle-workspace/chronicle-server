@@ -13,6 +13,14 @@ export class DiaryService {
 
   public async findAll(user: User, page: number, limit: number) {
     return await this.prismaService.diary.findMany({
+      select: {
+        id: true,
+        title: true,
+        isLocked: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       where: { userId: user.id },
       take: limit,
       skip: (page - 1) * limit,
