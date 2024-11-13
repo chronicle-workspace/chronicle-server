@@ -42,7 +42,7 @@ enum Mimetype {
 
 model DiaryContent {
   id       String   @id @default(uuid())
-  order    Int
+  order    Int      @unique @default(autoincrement())
   mimetype Mimetype
   content  String
   diaryId  String
