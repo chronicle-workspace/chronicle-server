@@ -25,4 +25,8 @@ COPY --from=builder /app/package.json .
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
-CMD ["pnpm", "start:prod"]
+COPY docker-entrypoint.sh /app
+
+RUN chmod +x /app/docker-entrypoint.sh
+
+ENTRYPOINT ["sh", "/app/docker-entrypoint.sh"]
