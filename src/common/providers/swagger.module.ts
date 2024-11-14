@@ -7,6 +7,8 @@ export async function swagger(app: INestApplication) {
     .setDescription("REST API Documentation")
     .setVersion("1.0")
     .addBearerAuth()
+    .addServer("http://localhost:3000")
+    .addServer("https://chronicle.seogaemo.com/api")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
