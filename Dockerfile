@@ -25,12 +25,4 @@ COPY --from=builder /app/package.json .
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
-COPY docker-entrypoint.sh /app
-COPY prisma ./prisma
-
-RUN npx prisma generate
-
-RUN chmod +x /app/docker-entrypoint.sh
-
-
-ENTRYPOINT ["sh", "/app/docker-entrypoint.sh"]
+CMD ["pnpm", "start:prod"]
