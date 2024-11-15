@@ -12,6 +12,9 @@ export class DiaryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   public async findAll(user: User, page: number, limit: number) {
+    page = page || 1;
+    limit = limit || 10;
+
     return await this.prismaService.diary.findMany({
       select: {
         id: true,
