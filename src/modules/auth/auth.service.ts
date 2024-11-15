@@ -23,7 +23,10 @@ export class AuthService {
   private async _generateAccessToken(id: string) {
     const token = await this.jwtService.signAsync(
       { id, type: "ACCESS" },
-      { expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRATION") },
+      {
+        secret: this.configService.get("JWT_SECRET"),
+        expiresIn: this.configService.get("ACCESS_TOKEN_EXPIRATION"),
+      },
     );
 
     return token;
@@ -32,7 +35,10 @@ export class AuthService {
   private async _generateRefreshToken(id: string) {
     const token = await this.jwtService.signAsync(
       { id, type: "REFRESH" },
-      { expiresIn: this.configService.get("REFRESH_TOKEN_EXPIRATION") },
+      {
+        secret: this.configService.get("JWT_SECRET"),
+        expiresIn: this.configService.get("REFRESH_TOKEN_EXPIRATION"),
+      },
     );
 
     await this.cacheService.set(`REFRESH/${id}`, token);
@@ -49,7 +55,7 @@ export class AuthService {
 
   public async verifyAccessToken(id: string, token: string) {
     const _token = await this.jwtService.verifyAsync(token, {
-      secret: this.configService.get("ACCESS_TOKEN_SECRET"),
+      secret: this.configService.get("JWT_SECRET"),
     });
 
     return _token.id === id;
