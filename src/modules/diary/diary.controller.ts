@@ -12,6 +12,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import {
+  ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
@@ -35,6 +36,7 @@ export class DiaryController {
 
   @Get("/")
   @UseGuards(AccessGuard)
+  @ApiBearerAuth()
   @ApiQuery({ name: "page", required: false })
   @ApiQuery({ name: "limit", required: false })
   @ApiOperation({ summary: "Get all diaries" })
@@ -42,14 +44,15 @@ export class DiaryController {
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async findAll(
     @CurrentUser() user: User,
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
+    @Query("page") page: number,
+    @Query("limit") limit: number,
   ) {
     return await this.diaryService.findAll(user, page, limit);
   }
 
   @Get("/:diaryId")
   @UseGuards(AccessGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: "Get diary" })
   @ApiOkResponse({ description: "Return diary", type: GetDiaryContentDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
@@ -59,6 +62,7 @@ export class DiaryController {
 
   @Post("/")
   @UseGuards(AccessGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: "Create diary" })
   @ApiOkResponse({ description: "Diary created" })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
@@ -68,6 +72,7 @@ export class DiaryController {
 
   @Put("/:diaryId/content")
   @UseGuards(AccessGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: "Create diary content" })
   @ApiOkResponse({ description: "Diary content created" })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
@@ -80,6 +85,7 @@ export class DiaryController {
 
   @Patch("/:diaryId/content/:contentId")
   @UseGuards(AccessGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: "Update diary content" })
   @ApiOkResponse({ description: "Diary content updated" })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
