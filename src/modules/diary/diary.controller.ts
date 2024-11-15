@@ -26,7 +26,7 @@ import { AccessGuard } from "../auth/guards/access.guard";
 import { DiaryService } from "./diary.service";
 import { CreateDiaryContentDTO, CreateDiaryDTO } from "./dto/create.diary.dto";
 import { DiaryDTO } from "./dto/diary.dto";
-import { GetDiaryContentDTO } from "./dto/get.diary.dto";
+import { GetDiaryDTO } from "./dto/get.diary.dto";
 import { UpdateDiaryContentDTO } from "./dto/update.diary.dto";
 
 @Controller("diary")
@@ -54,7 +54,7 @@ export class DiaryController {
   @UseGuards(AccessGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Get diary" })
-  @ApiOkResponse({ description: "Return diary", type: GetDiaryContentDTO })
+  @ApiOkResponse({ description: "Return diary", type: GetDiaryDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async findOne(@Param("diaryId") diaryId: string) {
     return await this.diaryService.findOne(diaryId);

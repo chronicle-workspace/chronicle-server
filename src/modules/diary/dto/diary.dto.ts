@@ -35,6 +35,10 @@ export class DiaryDTO implements Partial<Diary> {
 }
 
 export class DiaryContentDTO implements Partial<DiaryContent> {
+  @IsString({ message: "ID must be a string" })
+  @ApiProperty({ description: "내용 ID" })
+  id?: string;
+
   @IsNumber({}, { message: "Order must be a number" })
   @ApiProperty({ description: "내용 순서" })
   order?: number;
