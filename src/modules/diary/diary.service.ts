@@ -34,7 +34,11 @@ export class DiaryService {
   public async findOne(id: string) {
     return await this.prismaService.diary.findUnique({
       where: { id },
-      include: { contents: true },
+      include: {
+        contents: {
+          orderBy: { order: "asc" },
+        },
+      },
     });
   }
 
