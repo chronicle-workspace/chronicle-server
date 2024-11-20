@@ -24,10 +24,14 @@ import { CurrentUser } from "src/common";
 
 import { AccessGuard } from "../auth/guards/access.guard";
 import { DiaryService } from "./diary.service";
-import { CreateDiaryContentDTO, CreateDiaryDTO } from "./dto/create.diary.dto";
+import {
+  CreateDiaryContentDTO,
+  CreateDiaryDTO,
+  CreateDiaryResponseDTO,
+} from "./dto/create.diary.dto";
 import { DiaryDTO } from "./dto/diary.dto";
 import { GetDiaryDTO } from "./dto/get.diary.dto";
-import { UpdateDiaryContentDTO } from "./dto/update.diary.dto";
+import { UpdateDiaryContentDTO, UpdateDiaryDTO } from "./dto/update.diary.dto";
 
 @Controller("diary")
 @ApiTags("Diary")
@@ -64,10 +68,23 @@ export class DiaryController {
   @UseGuards(AccessGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: "Create diary" })
-  @ApiOkResponse({ description: "Diary created" })
+  @ApiOkResponse({ description: "Diary created", type: CreateDiaryResponseDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async create(@CurrentUser() user: User, @Body() body: CreateDiaryDTO) {
     return await this.diaryService.create(user, body);
+  }
+
+  @Patch("/:diaryId")
+  @UseGuards(AccessGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Update diary" })
+  @ApiOkResponse({ description: "Diary updated" })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  public async update(
+    @Param("diaryId") diaryId: string,
+    @Body() body: UpdateDiaryDTO,
+  ) {
+    return await this.diaryService.update(diaryId, body);
   }
 
   @Put("/:diaryId/content")
