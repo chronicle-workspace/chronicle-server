@@ -1,7 +1,8 @@
+import { Cache } from "cache-manager";
 import { OAuth2Client } from "google-auth-library";
 
-import { Cache } from "@nestjs/cache-manager";
-import { Injectable } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 
@@ -14,9 +15,10 @@ export class AuthService {
   private readonly client = new OAuth2Client();
 
   constructor(
+    @Inject(CACHE_MANAGER)
+    private readonly cacheService: Cache,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly cacheService: Cache,
     private readonly userService: UserService,
   ) {}
 
@@ -41,7 +43,11 @@ export class AuthService {
       },
     );
 
-    await this.cacheService.set(`REFRESH/${id}`, token);
+    await this.cacheService.set(
+      `REFRESH/${id}`,
+      token,
+      this.configService.get("REFRESH_TOKEN_EXPIRATION"),
+    );
 
     return token;
   }
@@ -62,6 +68,7 @@ export class AuthService {
   }
 
   public async verifyRefreshToken(id: string, token: string) {
+    console.log(await this.cacheService.get(`REFRESH/${id}`));
     return (await this.cacheService.get(`REFRESH/${id}`)) === token;
   }
 
