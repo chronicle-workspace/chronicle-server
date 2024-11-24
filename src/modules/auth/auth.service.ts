@@ -1,5 +1,6 @@
 import { Cache } from "cache-manager";
 import { OAuth2Client } from "google-auth-library";
+import ms from "ms";
 
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Inject, Injectable } from "@nestjs/common";
@@ -46,7 +47,7 @@ export class AuthService {
     await this.cacheService.set(
       `REFRESH/${id}`,
       token,
-      this.configService.get("REFRESH_TOKEN_EXPIRATION"),
+      ms(this.configService.get<string>("REFRESH_TOKEN_EXPIRATION")),
     );
 
     return token;
@@ -68,7 +69,6 @@ export class AuthService {
   }
 
   public async verifyRefreshToken(id: string, token: string) {
-    console.log(await this.cacheService.get(`REFRESH/${id}`));
     return (await this.cacheService.get(`REFRESH/${id}`)) === token;
   }
 
