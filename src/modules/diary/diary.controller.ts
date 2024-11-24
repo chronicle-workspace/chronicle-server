@@ -29,7 +29,7 @@ import {
   CreateDiaryDTO,
   CreateDiaryResponseDTO,
 } from "./dto/create.diary.dto";
-import { DiaryDTO } from "./dto/diary.dto";
+import { GetDiariesDTO } from "./dto/diary.dto";
 import { GetDiaryDTO } from "./dto/get.diary.dto";
 import { UpdateDiaryContentDTO, UpdateDiaryDTO } from "./dto/update.diary.dto";
 
@@ -44,7 +44,7 @@ export class DiaryController {
   @ApiQuery({ name: "page", required: false })
   @ApiQuery({ name: "limit", required: false })
   @ApiOperation({ summary: "Get all diaries" })
-  @ApiOkResponse({ description: "Return all diaries", type: [DiaryDTO] })
+  @ApiOkResponse({ description: "Return all diaries", type: GetDiariesDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   public async findAll(
     @CurrentUser() user: User,

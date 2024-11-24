@@ -34,6 +34,14 @@ export class DiaryDTO implements Partial<Diary> {
   updatedAt: Date;
 }
 
+export class GetDiariesDTO {
+  @ApiProperty({ description: "일기 목록", type: [DiaryDTO] })
+  diaries: DiaryDTO[];
+
+  @ApiProperty({ description: "다음 페이지", type: Number })
+  nextCursor: number | null;
+}
+
 export class DiaryContentDTO implements Partial<DiaryContent> {
   @IsString({ message: "ID must be a string" })
   @ApiProperty({ description: "내용 ID" })

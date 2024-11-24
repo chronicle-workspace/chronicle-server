@@ -15,7 +15,7 @@ export class DiaryService {
     page = page || 1;
     limit = limit || 10;
 
-    return await this.prismaService.diary.findMany({
+    const diaries = await this.prismaService.diary.findMany({
       select: {
         id: true,
         title: true,
@@ -29,6 +29,12 @@ export class DiaryService {
       skip: (page - 1) * limit,
       orderBy: { createdAt: "desc" },
     });
+
+    const total = await this.prismaService.diary.count({
+      where: { userId: user.id },
+    });
+
+    return { diaries, nextCursor: page * limit < total ? page + 1 : null };
   }
 
   public async findOne(id: string) {
