@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client, S3ClientConfig } from "@aws-sdk/client-s3";
+import { createReadStream } from "fs";
 
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -24,7 +25,6 @@ export class S3Service {
   #S3Region = this.configService.get("S3_REGION", { infer: true });
   #S3AccessKey = this.configService.get("S3_ACCESS_KEY", { infer: true });
   #S3SecretKey = this.configService.get("S3_SECRET_KEY", { infer: true });
-  #S3PublicUrl = this.configService.get("S3_PUBLIC_URL", { infer: true });
 
   private readonly clientConfig: S3ClientConfig = {
     endpoint: this.#S3Endpoint,
@@ -33,47 +33,28 @@ export class S3Service {
       accessKeyId: this.#S3AccessKey,
       secretAccessKey: this.#S3SecretKey,
     },
+    forcePathStyle: true,
   };
 
   private readonly client = new S3Client(this.clientConfig);
 
   /**
-   * 이미지를 AWS S3에 업로드합니다.
-   * @param base64Image 업로드할 이미지의 base64 문자열
-   * @returns 업로드된 이미지의 URL
+   * 파일을 S3에 업로드합니다.
+   * @param file 컨트롤러에서 받은 Multer File
+   * @returns 업로드된 파일의 키
    */
-  async uploadImage(key: string, base64Image: string): Promise<string> {
-    const buffer = Buffer.from(base64Image, "base64");
+  async uploadFile(key: string, file: Express.Multer.File): Promise<string> {
+    const stream = createReadStream(file.path);
 
     const command = new PutObjectCommand({
       Bucket: this.#bucketName,
       Key: key,
-      Body: buffer,
-      ContentType: "image/png",
+      Body: stream,
+      ContentType: file.mimetype,
     });
 
     await this.client.send(command);
 
-    return `${this.#S3PublicUrl}/${key}`;
-  }
-
-  /**
-   * 이미지를 AWS S3에 업로드합니다.
-   * @param base64Pdf 업로드할 pdf의 base64 문자열
-   * @returns 업로드된 pdf의 URL
-   */
-  async uploadPdf(key: string, base64Pdf: string): Promise<string> {
-    const buffer = Buffer.from(base64Pdf, "base64");
-
-    const command = new PutObjectCommand({
-      Bucket: this.#bucketName,
-      Key: key,
-      Body: buffer,
-      ContentType: "application/pdf",
-    });
-
-    await this.client.send(command);
-
-    return `${this.#S3PublicUrl}/${key}`;
+    return key;
   }
 }
