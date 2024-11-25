@@ -58,9 +58,10 @@ export class DiaryService {
   }
 
   public async update(id: string, body: UpdateDiaryDTO) {
+    const data = { ...body, isLocked: !!body.password };
     return await this.prismaService.diary.update({
       where: { id },
-      data: body,
+      data,
     });
   }
 
