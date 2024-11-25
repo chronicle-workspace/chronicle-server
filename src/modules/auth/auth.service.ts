@@ -21,11 +21,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly userService: UserService,
-  ) {
-    this.generateTokens("4c5fd554-77d8-46f3-81ce-1a5bfd7e6627").then(
-      console.log,
-    );
-  }
+  ) {}
 
   private async _generateAccessToken(id: string) {
     const token = await this.jwtService.signAsync(
