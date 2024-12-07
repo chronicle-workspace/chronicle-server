@@ -85,6 +85,12 @@ export class DiaryService {
     });
   }
 
+  public async deleteContent(diaryId: string, contentId: string) {
+    return await this.prismaService.diaryContent.delete({
+      where: { id: contentId, diaryId },
+    });
+  }
+
   public async updateContentOrder(id: string, order: number) {
     return await this.prismaService.diaryContent.update({
       where: { id },

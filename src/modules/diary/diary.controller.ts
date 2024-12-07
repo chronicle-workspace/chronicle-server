@@ -3,6 +3,7 @@ import { User } from "@prisma/client";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -112,5 +113,18 @@ export class DiaryController {
     @Body() body: UpdateDiaryContentDTO,
   ) {
     return await this.diaryService.updateContent(diaryId, contentId, body);
+  }
+
+  @Delete("/:diaryId/content/:contentId")
+  @UseGuards(AccessGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Delete diary content" })
+  @ApiOkResponse({ description: "Diary content deleted" })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  public async deleteContent(
+    @Param("diaryId") diaryId: string,
+    @Param("contentId") contentId: string,
+  ) {
+    return await this.diaryService.deleteContent(diaryId, contentId);
   }
 }

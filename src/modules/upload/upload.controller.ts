@@ -10,9 +10,10 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { FilesInterceptor } from "@nestjs/platform-express";
+import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiOkResponse,
   ApiOperation,
@@ -38,6 +39,24 @@ export class UploadController {
   @ApiOkResponse({ description: "S3 Paths", type: PathsDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        files: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              uri: { type: "string" },
+              name: { type: "string" },
+              type: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+  })
   @UseInterceptors(
     FilesInterceptor("files", null, {
       storage: diskStorage({
