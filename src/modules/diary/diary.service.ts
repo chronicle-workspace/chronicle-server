@@ -24,6 +24,7 @@ export class DiaryService {
         createdAt: true,
         updatedAt: true,
         contents: {
+          orderBy: { order: "asc" },
           where: { mimetype: Mimetype.TEXT },
         },
       },
