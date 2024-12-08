@@ -29,7 +29,7 @@ export class DiaryService {
       },
       where: {
         userId: user.id,
-        contents: { some: { mimetype: Mimetype.TEXT } },
+        contents: { every: { mimetype: Mimetype.TEXT } },
       },
       take: limit,
       skip: (page - 1) * limit,
