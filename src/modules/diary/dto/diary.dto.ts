@@ -10,6 +10,27 @@ import {
 
 import { ApiProperty } from "@nestjs/swagger";
 
+export class DiaryContentDTO implements Partial<DiaryContent> {
+  @IsString({ message: "ID must be a string" })
+  @ApiProperty({ description: "내용 ID" })
+  id?: string;
+
+  @IsNumber({}, { message: "Order must be a number" })
+  @ApiProperty({ description: "내용 순서" })
+  order?: number;
+
+  @IsString({ message: "Content must be a string" })
+  @ApiProperty({ description: "일기 내용" })
+  content: string;
+
+  @IsEnum($Enums.Mimetype)
+  @ApiProperty({ description: "내용 MIME 타입", enum: $Enums.Mimetype })
+  mimetype: $Enums.Mimetype;
+
+  @ApiProperty({ description: "내용 생성일" })
+  createdAt: Date;
+}
+
 export class DiaryDTO implements Partial<Diary> {
   @ApiProperty({ description: "일기 ID" })
   id: string;
@@ -34,31 +55,15 @@ export class DiaryDTO implements Partial<Diary> {
   updatedAt: Date;
 }
 
+export class GetDiaryDTO extends DiaryDTO {
+  @ApiProperty({ description: "일기 내용", type: [DiaryContentDTO] })
+  contents: DiaryContentDTO[];
+}
+
 export class GetDiariesDTO {
-  @ApiProperty({ description: "일기 목록", type: [DiaryDTO] })
-  diaries: DiaryDTO[];
+  @ApiProperty({ description: "일기 목록", type: [GetDiaryDTO] })
+  diaries: GetDiaryDTO[];
 
   @ApiProperty({ description: "다음 페이지", type: Number })
   nextCursor: number | null;
-}
-
-export class DiaryContentDTO implements Partial<DiaryContent> {
-  @IsString({ message: "ID must be a string" })
-  @ApiProperty({ description: "내용 ID" })
-  id?: string;
-
-  @IsNumber({}, { message: "Order must be a number" })
-  @ApiProperty({ description: "내용 순서" })
-  order?: number;
-
-  @IsString({ message: "Content must be a string" })
-  @ApiProperty({ description: "일기 내용" })
-  content: string;
-
-  @IsEnum($Enums.Mimetype)
-  @ApiProperty({ description: "내용 MIME 타입", enum: $Enums.Mimetype })
-  mimetype: $Enums.Mimetype;
-
-  @ApiProperty({ description: "내용 생성일" })
-  createdAt: Date;
 }

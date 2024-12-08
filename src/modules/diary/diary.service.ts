@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Mimetype, User } from "@prisma/client";
 
 import { Injectable } from "@nestjs/common";
 
@@ -23,8 +23,14 @@ export class DiaryService {
         password: true,
         createdAt: true,
         updatedAt: true,
+        contents: {
+          select: { content: true },
+        },
       },
-      where: { userId: user.id },
+      where: {
+        userId: user.id,
+        contents: { some: { mimetype: Mimetype.TEXT } },
+      },
       take: limit,
       skip: (page - 1) * limit,
       orderBy: { createdAt: "desc" },
