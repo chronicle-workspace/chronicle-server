@@ -24,12 +24,11 @@ export class DiaryService {
         createdAt: true,
         updatedAt: true,
         contents: {
-          select: { content: true },
+          where: { mimetype: Mimetype.TEXT },
         },
       },
       where: {
         userId: user.id,
-        contents: { every: { mimetype: Mimetype.TEXT } },
       },
       take: limit,
       skip: (page - 1) * limit,
