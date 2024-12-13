@@ -127,4 +127,14 @@ export class DiaryController {
   ) {
     return await this.diaryService.deleteContent(diaryId, contentId);
   }
+
+  @Delete("/:diaryId")
+  @UseGuards(AccessGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Delete diary" })
+  @ApiOkResponse({ description: "Diary deleted" })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  public async delete(@Param("diaryId") diaryId: string) {
+    return await this.diaryService.delete(diaryId);
+  }
 }

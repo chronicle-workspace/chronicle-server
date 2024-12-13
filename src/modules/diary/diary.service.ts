@@ -71,6 +71,10 @@ export class DiaryService {
     });
   }
 
+  public async delete(id: string) {
+    return await this.prismaService.diary.delete({ where: { id } });
+  }
+
   public async createContent(diaryId: string, body: CreateDiaryContentDTO) {
     return await this.prismaService.diaryContent.create({
       data: {
