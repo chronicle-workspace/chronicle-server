@@ -20,6 +20,17 @@ model User {
   providerId String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  Device     Device?
+}
+
+model Device {
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fcmToken   String
+  deviceName String
+  isAllowed  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Diary {
