@@ -1,8 +1,9 @@
 import { User } from "@prisma/client";
 
-import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Put, UseGuards } from "@nestjs/common";
 import {
   ApiBearerAuth,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -16,6 +17,7 @@ import { DeviceService } from "./device.service";
 import { DeviceCreateDTO } from "./dto/device.dto";
 import { ExistsDTO } from "./dto/exists.dto";
 import { DeviceInfoDTO } from "./dto/info.dto";
+import { AlertSettingDTO } from "./dto/setting.dto";
 
 @ApiTags("device")
 @Controller("device")
@@ -28,6 +30,7 @@ export class DeviceController {
   @ApiOperation({ summary: "Get user device infomation" })
   @ApiOkResponse({ description: "User Device Infomation", type: DeviceInfoDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiNotFoundResponse({ description: "Device not found" })
   async info(@CurrentUser() user: User) {
     return { device: await this.deviceService.info(user) };
   }
@@ -50,7 +53,20 @@ export class DeviceController {
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   async register(@CurrentUser() user: User, @Body() device: DeviceCreateDTO) {
     return {
-      device: (await this.deviceService.register(user, device)) ?? null,
+      device: await this.deviceService.register(user, device),
+    };
+  }
+
+  @Patch("setting")
+  @UseGuards(AccessGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Update Alert Setting" })
+  @ApiOkResponse({ description: "Alert Setting updated", type: DeviceInfoDTO })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiNotFoundResponse({ description: "Device not found" })
+  async setting(@CurrentUser() user: User, @Body() setting: AlertSettingDTO) {
+    return {
+      device: await this.deviceService.updateSetting(user, setting),
     };
   }
 }
