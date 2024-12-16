@@ -84,9 +84,12 @@ export class UserService {
 
     let message: string = "오늘 일기를 작성해볼까요?";
     try {
-      const text = await fetch(this.config.get<string>("MESSAGE_URL")).then(
-        (res) => res.text(),
-      );
+      const text = await fetch(this.config.get<string>("MESSAGE_URL"), {
+        method: "GET",
+        headers: {
+          "User-Agent": "curl",
+        },
+      }).then((res) => res.text());
 
       if (text.length > 0) message = shuffle(text.split("//"))[0].trim();
     } catch (error) {
