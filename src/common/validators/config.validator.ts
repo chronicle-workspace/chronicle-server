@@ -24,4 +24,5 @@ export const ConfigValidator = Joi.object({
   S3_SECRET_KEY: Joi.string().required(),
   REDIS_HOST: Joi.string().required(),
   REDIS_PORT: Joi.number().default(6379),
+  MESSAGE_URL: Joi.string().required(),
 });

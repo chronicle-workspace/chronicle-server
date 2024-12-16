@@ -41,6 +41,9 @@ importers:
       '@prisma/client':
         specifier: ^5.19.1
         version: 5.19.1
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.13
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -77,6 +80,9 @@ importers:
       jwks-rsa:
         specifier: ^3.1.0
         version: 3.1.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
@@ -1394,6 +1400,9 @@ packages:
 
   '@types/jsonwebtoken@9.0.7':
     resolution: {integrity: sha512-ugo316mmTYBl2g81zDFnZ7cfxlut3o+/EQdaP7J8QN2kY6lJ22hmQYCK5EHcJHbrW+dkCGSCPgbG8JtYj6qSrg==}
+
+  '@types/lodash@4.17.13':
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -5944,6 +5953,8 @@ snapshots:
   '@types/jsonwebtoken@9.0.7':
     dependencies:
       '@types/node': 20.16.5
+
+  '@types/lodash@4.17.13': {}
 
   '@types/long@4.0.2':
     optional: true
