@@ -35,8 +35,8 @@ export class DeviceController {
   @Get("exists")
   @UseGuards(AccessGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: "Get user profile" })
-  @ApiOkResponse({ description: "User profile retrieved", type: ExistsDTO })
+  @ApiOperation({ summary: "Check User Device Exists" })
+  @ApiOkResponse({ description: "isExists", type: ExistsDTO })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   async exists(@CurrentUser() user: User) {
     return { isExists: await this.deviceService.exists(user) };
