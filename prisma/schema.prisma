@@ -27,6 +27,7 @@ model Device {
   userId     String   @unique
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   fcmToken   String
+  deviceId   String   @unique
   deviceName String
   isAllowed  Boolean  @default(true)
   createdAt  DateTime @default(now())

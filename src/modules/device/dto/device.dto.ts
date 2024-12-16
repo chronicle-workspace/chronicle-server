@@ -12,6 +12,10 @@ export class DeviceDTO implements Device {
   fcmToken: string;
 
   @IsString()
+  @ApiProperty({ description: "Device Id" })
+  deviceId: string;
+
+  @IsString()
   @ApiProperty({ description: "Device Name" })
   deviceName: string;
 
@@ -28,5 +32,6 @@ export class DeviceDTO implements Device {
 
 export class DeviceCreateDTO extends PickType(DeviceDTO, [
   "fcmToken",
+  "deviceId",
   "deviceName",
 ]) {}

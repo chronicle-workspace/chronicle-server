@@ -35,7 +35,7 @@ export class DeviceService {
 
   async register(
     { id }: Pick<User, "id">,
-    { fcmToken, deviceName }: DeviceCreateDTO,
+    { fcmToken, deviceId, deviceName }: DeviceCreateDTO,
   ) {
     return this.prisma.device.upsert({
       where: {
@@ -43,10 +43,12 @@ export class DeviceService {
       },
       update: {
         fcmToken,
+        deviceId,
         deviceName,
       },
       create: {
         userId: id,
+        deviceId,
         fcmToken,
         deviceName,
       },
