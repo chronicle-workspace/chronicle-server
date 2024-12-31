@@ -12,6 +12,7 @@ services:
       - redis
   redis:
     image: "redis:7.2.5"
+    restart: always
 
 volumes:
   postgres_data:
